@@ -1,0 +1,130 @@
+def check(func):
+    def wrapper(a, b):
+        if b == 0:
+            return "Denominator can't be zero"
+        return func(a, b)
+    return wrapper
+
+@check
+def div(a, b):
+    return a / b
+
+print(div(6, 2))  # 3
+print(div(6, 0))  # "Denominator can't be zero"
+import os
+
+FILE_NAME = "employees.txt"
+
+def add_employee():
+    with open(FILE_NAME, "a") as file:
+        employee_id = input("Enter Employee ID: ")
+        name = input("Enter Name: ")
+        position = input("Enter Position: ")
+        salary = input("Enter Salary: ")
+        file.write(f"{employee_id}, {name}, {position}, {salary}\n")
+
+def view_employees():
+    if not os.path.exists(FILE_NAME):
+        print("No records found.")
+        return
+    with open(FILE_NAME, "r") as file:
+        for line in file:
+            print(line.strip())
+
+def search_employee():
+    employee_id = input("Enter Employee ID to search: ")
+    with open(FILE_NAME, "r") as file:
+        for line in file:
+            if line.startswith(employee_id):
+                print(line.strip())
+                return
+    print("Employee not found.")
+
+def update_employee():
+    employee_id = input("Enter Employee ID to update: ")
+    lines = []
+    found = False
+    with open(FILE_NAME, "r") as file:
+        for line in file:
+            if line.startswith(employee_id):
+                found = True
+                name = input("Enter new Name: ")
+                position = input("Enter new Position: ")
+                salary = input("Enter new Salary: ")
+                lines.append(f"{employee_id}, {name}, {position}, {salary}\n")
+            else:
+                lines.append(line)
+    if found:
+        with open(FILE_NAME, "w") as file:
+            file.writelines(lines)
+        print("Record updated.")
+    else:
+        print("Employee not found.")
+
+def delete_employee():
+    employee_id = input("Enter Employee ID to delete: ")
+    lines = []
+    found = False
+    with open(FILE_NAME, "r") as file:
+        for line in file:
+            if not line.startswith(employee_id):
+                lines.append(line)
+            else:
+                found = True
+    if found:
+        with open(FILE_NAME, "w") as file:
+            file.writelines(lines)
+        print("Record deleted.")
+    else:
+        print("Employee not found.")
+
+while True:
+    print("\n1. Add Employee\n2. View Employees\n3. Search Employee\n4. Update Employee\n5. Delete Employee\n6. Exit")
+    choice = input("Choose an option: ")
+    if choice == "1":
+        add_employee()
+    elif choice == "2":
+        view_employees()
+    elif choice == "3":
+        search_employee()
+    elif choice == "4":
+        update_employee()
+    elif choice == "5":
+        delete_employee()
+    elif choice == "6":
+        break
+    else:
+        print("Invalid choice. Try again.")
+#soz chastotasini hisoblagich
+import collections
+import string
+
+FILE_NAME = "sample.txt"
+
+def process_text():
+    if not os.path.exists(FILE_NAME):
+        text = input("Enter text to create sample.txt: ")
+        with open(FILE_NAME, "w") as file:
+            file.write(text)
+
+    with open(FILE_NAME, "r") as file:
+        text = file.read().lower()
+
+    text = text.translate(str.maketrans("", "", string.punctuation))
+    words = text.split()
+    
+    word_counts = collections.Counter(words)
+    
+    print(f"Total words: {sum(word_counts.values())}")
+    print("Top 5 most common words:")
+    for word, count in word_counts.most_common(5):
+        print(f"{word} - {count} times")
+
+    with open("word_count_report.txt", "w") as file:
+        file.write("Word Count Report\n")
+        file.write(f"Total Words: {sum(word_counts.values())}\n")
+        file.write("Top 5 Words:\n")
+        for word, count in word_counts.most_common(5):
+            file.write(f"{word} - {count}\n")
+
+process_text()
