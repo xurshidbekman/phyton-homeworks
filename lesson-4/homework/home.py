@@ -124,4 +124,4 @@ def tosh_qogoz_qaychi():
 
 # O'yinni boshlash uchun:
 
-tosh_qogoz_qaychi()tosh_qogoz_qaychi()
+tosh_qogoz_qaychi()
