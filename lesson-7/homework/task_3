@@ -1,0 +1,43 @@
+import json
+
+class Task:
+    def __init__(self, task_id, title, description, due_date, status="Pending"):
+        self.task_id = task_id
+        self.title = title
+        self.description = description
+        self.due_date = due_date
+        self.status = status
+
+    def __repr__(self):
+        return f"{self.task_id}, {self.title}, {self.description}, {self.due_date}, {self.status}"
+
+class TaskManager:
+    FILE_NAME = "tasks.json"
+
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def view_tasks(self):
+        for task in self.tasks:
+            print(task)
+
+    def save_tasks(self):
+        with open(self.FILE_NAME, "w") as file:
+            json.dump([task.__dict__ for task in self.tasks], file)
+
+    def load_tasks(self):
+        try:
+            with open(self.FILE_NAME, "r") as file:
+                self.tasks = [Task(**data) for data in json.load(file)]
+        except FileNotFoundError:
+            print("Fayl topilmadi!")
+
+# Misollar
+manager = TaskManager()
+manager.add_task(Task(101, "Finish Homework", "Complete math and science homework", "2024-12-31"))
+manager.view_tasks()
+manager.save_tasks()
+manager.load_tasks()
